@@ -37,3 +37,5 @@ while(numberOfGuesses <= 10): #stop loop if guessingWord = word
         ENDLETTERS += i
     print(ENDLETTERS)
 
+
+#IS THIS UPDATED???
