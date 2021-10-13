@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import random
 
 
@@ -9,12 +8,19 @@ class colors:
 
 
 class player:
-    def __init__(self, name, prizeMoney=0) -> None:
+    def __init__(self, name, bank):
         self.name = name
-        self.prizeMoney = prizeMoney
+        self.bank = bank
+        self.prizes = []
 
     def addMoney(self, bank):
         self.prizeMoney += bank
+
+    def goBankrupt(self):
+        self.prizeMoney = 0
+
+    def addPrize(self, prize):
+        self.prizes.append(prize)
 
 
 def getCorrectInput(uinput, min, max):
@@ -37,9 +43,6 @@ def getCorrectInput(uinput, min, max):
 
 NumPlayers = getCorrectInput("How many players are playing?", 1, 10)
 
-=======
-import random 
->>>>>>> main
 
 word = ["halloween", "christmas", "easter"]
 clue = ["Holiday on October 30th", "Santa Claus", "Rabbits!"]
@@ -61,7 +64,6 @@ print(letterIDK)
 
 lettersGuessed = ""
 numberOfGuesses = 0
-<<<<<<< HEAD
 while(numberOfGuesses <= 10):  # stop loop if guessingWord = word
     if(ENDLETTERS == chosenWord):
         print(colors.correctGreen + "You win!" + colors.whiteBasic)
@@ -69,14 +71,6 @@ while(numberOfGuesses <= 10):  # stop loop if guessingWord = word
     numberOfGuesses += 1
     guess = input("Guess a letter: ")
     letter = guess.lower()
-=======
-while(numberOfGuesses <= 10): #stop loop if guessingWord = word
-    if(ENDLETTERS == chosenWord):
-        print("You win!")
-        break
-    numberOfGuesses += 1
-    letter = input("Guess a letter: ")
->>>>>>> main
     lettersGuessed += letter
     print(lettersGuessed)
 
@@ -84,17 +78,8 @@ while(numberOfGuesses <= 10): #stop loop if guessingWord = word
     for i in range(len(chosenWord)):
         if chosenWord[i] == letter:
             guessingWord[i] = letter
-<<<<<<< HEAD
-
-=======
->>>>>>> main
     for i in guessingWord:
         ENDLETTERS += i
     print(ENDLETTERS)
 
-<<<<<<< HEAD
 print(colors.whiteBasic)
-=======
-
-#IS THIS UPDATED???
->>>>>>> main
