@@ -1,6 +1,5 @@
 import random 
 
-
 class colors:
     correctGreen = '\033[92m'
     wrongRed = '\033[91m'
@@ -25,7 +24,6 @@ class player:
 
 def getCorrectInput(uinput, min, max):
     userinput = input(uinput)
-
     while True:
         try:
             x = int(userinput)
@@ -41,25 +39,26 @@ def getCorrectInput(uinput, min, max):
         userinput = input('{}\n{}'.format(errmessage, uinput))
 
 
-NumPlayers = getCorrectInput("How many players are playing?", 1, 10)
+# NumPlayers = getCorrectInput("How many players are playing?", 1, 10)
 
-word = ["halloween", "christmas", "easter"]
-clue = ["Holiday on October 30th", "Santa Claus", "Rabbits!"]
-letterIDK = ""
+word = ["halloween", "christmas", "easter"] # list of words
+clue = ["Holiday on October 30th", "Santa Claus", "Rabbits!"] # list of corresponding clues
+lettersWdash = ""
 ENDLETTERS = ""
 
-chosenWord = random.choice(word)
-chosenClue = clue[word.index(chosenWord)]
+chosenWord = random.choice(word) #chosen word
+chosenClue = clue[word.index(chosenWord)] #corresponding clue
 
 print(chosenClue)
 
 guessingWord = []
 for i in chosenWord:
-    guessingWord.append("_ ")
+    guessingWord.append("_ ") #list of dashes matching up to the chosen word
 
+#prints out the dashes
 for i in guessingWord:
-    letterIDK += i
-print(letterIDK)
+    lettersWdash += i
+print(lettersWdash) 
 
 lettersGuessed = ""
 numberOfGuesses = 0
@@ -70,16 +69,20 @@ while(numberOfGuesses <= 10):  # stop loop if guessingWord = word
     numberOfGuesses += 1
     #can't guess a letter twice
     guess = input("Guess a letter: ")
-    letter = guess.lower()
-    lettersGuessed += letter
-    print(lettersGuessed)
+    if lettersGuessed.__contains__(guess):
+        print("That letter has been guessed. Try again!")
+        pass
+    else:
+        letter = guess.lower()
+        lettersGuessed += letter + ' '
+        print("These letters have been guessed:", lettersGuessed)
 
-    ENDLETTERS = ""
-    for i in range(len(chosenWord)):
-        if chosenWord[i] == letter:
-            guessingWord[i] = letter
-    for i in guessingWord:
-        ENDLETTERS += i
-    print(ENDLETTERS)
+        ENDLETTERS = ""
+        for i in range(len(chosenWord)):
+            if chosenWord[i] == letter:
+                guessingWord[i] = letter
+        for i in guessingWord:
+            ENDLETTERS += i 
+        print(ENDLETTERS) #prints out dashes included correct guesses
 
 print(colors.whiteBasic)
