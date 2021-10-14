@@ -6,15 +6,22 @@ class colors:
     wrongRed = '\033[91m'
     whiteBasic = '\033[97m'
 
-
 class player:
-    def __init__(self, name, prizeMoney=0) -> None:
+    def __init__(self, name, bank):
         self.name = name
-        self.prizeMoney = prizeMoney
+        self.bank = bank
+        self.prizes = []
 
     def addMoney(self, bank):
         self.prizeMoney += bank
 
+    def goBankrupt(self):
+        self.prizeMoney = 0
+
+    def addPrize(self, prize):
+        self.prizes.append(prize)
+    
+    #subtract function - for buy a vowel
 
 def getCorrectInput(uinput, min, max):
     userinput = input(uinput)
