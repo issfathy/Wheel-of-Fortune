@@ -43,15 +43,19 @@ def getCorrectInput(uinput, min, max):
 
 word = ["halloween", "christmas", "easter"] # list of words
 clue = ["Holiday on October 30th", "Santa Claus", "Rabbits!"] # list of corresponding clues
+
+#variables
 lettersWdash = ""
 ENDLETTERS = ""
+guessingWord = []
+lettersGuessed = ""
+vowels = ['a', 'e', 'i', 'o', 'u']
 
 chosenWord = random.choice(word) #chosen word
 chosenClue = clue[word.index(chosenWord)] #corresponding clue
 
 print(chosenClue)
 
-guessingWord = []
 for i in chosenWord:
     guessingWord.append("_ ") #list of dashes matching up to the chosen word
 
@@ -60,7 +64,6 @@ for i in guessingWord:
     lettersWdash += i
 print(lettersWdash) 
 
-lettersGuessed = ""
 numberOfGuesses = 0
 while(numberOfGuesses <= 10):  # stop loop if guessingWord = word
     if(ENDLETTERS == chosenWord):
@@ -71,6 +74,10 @@ while(numberOfGuesses <= 10):  # stop loop if guessingWord = word
     guess = input("Guess a letter: ")
     if lettersGuessed.__contains__(guess):
         print("That letter has been guessed. Try again!")
+        pass
+    elif vowels.__contains__(guess):
+        # subtract money from bank if possible
+        print("Sorry, you don't have enough funds for a vowel.")
         pass
     else:
         letter = guess.lower()
@@ -83,6 +90,6 @@ while(numberOfGuesses <= 10):  # stop loop if guessingWord = word
                 guessingWord[i] = letter
         for i in guessingWord:
             ENDLETTERS += i 
-        print(ENDLETTERS) #prints out dashes included correct guesses
+        print(ENDLETTERS) #prints out dashes including correct letters
 
 print(colors.whiteBasic)
