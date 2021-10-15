@@ -15,7 +15,7 @@ class player:
         self.prizeMoney += bank
 
 
-def getCorrectInput(uinput, min, max):
+def getCorrectInput(uinput, min, ma3x):
     userinput = input(uinput)
 
     while True:
