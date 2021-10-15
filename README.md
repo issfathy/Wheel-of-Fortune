@@ -1,4 +1,4 @@
-# The best project ever
+#                                      The Best Project Ever
 
 Wheel of fortune 
 Push all your code into your own branch and when your individual parts are done than push it into main.
