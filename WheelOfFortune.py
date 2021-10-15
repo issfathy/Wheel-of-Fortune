@@ -1,48 +1,18 @@
+from MultiPlayer import HumanPlayer, colors, interactions
 import random
+import os
+
+print(".\ / \ / \ / \ /.".center(os.get_terminal_size().columns))
+print("Welcome to Wheel of Fortune".center(os.get_terminal_size().columns))
+print("./ \ / \ / \ / \.".center(os.get_terminal_size().columns))
+print(" ")
 
 
-class colors:
-    correctGreen = '\033[92m'
-    wrongRed = '\033[91m'
-    whiteBasic = '\033[97m'
+NumPlayers = interactions.getCorrectInput(
+    "How many players are playing?", 1, 10)
 
-
-class player:
-    def __init__(self, name, bank):
-        self.name = name
-        self.bank = bank
-        self.prizes = []
-
-    def addMoney(self, bank):
-        self.prizeMoney += bank
-
-    def goBankrupt(self):
-        self.prizeMoney = 0
-
-    def addPrize(self, prize):
-        self.prizes.append(prize)
-
-
-def getCorrectInput(uinput, min, max):
-    userinput = input(uinput)
-
-    while True:
-        try:
-            x = int(userinput)
-            if x < min:
-                errmessage = 'Must be at least {}'.format(min)
-            elif x > max:
-                errmessage = 'Must be at most {}'.format(max)
-            else:
-                return x
-        except ValueError:
-            errmessage = '{} is not a number.'.format(userinput)
-
-        userinput = input('{}\n{}'.format(errmessage, uinput))
-
-
-NumPlayers = getCorrectInput("How many players are playing?", 1, 10)
-
+NamePlayers = [HumanPlayer(input("Enter the names of the player #{}".format(i+1)))
+               for i in range(NumPlayers)]
 
 word = ["halloween", "christmas", "easter"]
 clue = ["Holiday on October 30th", "Santa Claus", "Rabbits!"]
@@ -64,11 +34,17 @@ print(letterIDK)
 
 lettersGuessed = ""
 numberOfGuesses = 0
-while(numberOfGuesses <= 10):  # stop loop if guessingWord = word
+
+
+while(True):  # stop loop if guessingWord = word
+
     if(ENDLETTERS == chosenWord):
-        print(colors.correctGreen + "You win!" + colors.whiteBasic)
+        print(colors.Gold + "Winner" + colors.White)
         break
     numberOfGuesses += 1
+
+    # can't guess a letter twice
+
     guess = input("Guess a letter: ")
     letter = guess.lower()
     lettersGuessed += letter
@@ -82,4 +58,4 @@ while(numberOfGuesses <= 10):  # stop loop if guessingWord = word
         ENDLETTERS += i
     print(ENDLETTERS)
 
-print(colors.whiteBasic)
+print(colors.White)
