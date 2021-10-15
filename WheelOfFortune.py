@@ -23,7 +23,7 @@ class player:
     
     #subtract function - for buy a vowel
 
-def getCorrectInput(uinput, min, max):
+def getCorrectInput(uinput, min, ma3x):
     userinput = input(uinput)
 
     while True:
