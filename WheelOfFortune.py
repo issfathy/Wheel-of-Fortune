@@ -1,12 +1,13 @@
+
 from MultiPlayer import HumanPlayer, colors, interactions
 import random
 import os
+
 
 print(".\ / \ / \ / \ /.".center(os.get_terminal_size().columns))
 print("Welcome to Wheel of Fortune".center(os.get_terminal_size().columns))
 print("./ \ / \ / \ / \.".center(os.get_terminal_size().columns))
 print(" ")
-
 
 NumPlayers = interactions.getCorrectInput(
     "How many players are playing?", 1, 10)
@@ -42,8 +43,6 @@ while(True):  # stop loop if guessingWord = word
         print(colors.Gold + "Winner" + colors.White)
         break
     numberOfGuesses += 1
-
-    # can't guess a letter twice
 
     guess = input("Guess a letter: ")
     letter = guess.lower()
