@@ -12,7 +12,10 @@ class player:
         self.prizes = []
 
     def addMoney(self, bank):
-        self.prizeMoney += bank
+        self.prizeMoney = bank - 500
+
+    def subtractMoney(self, bank):
+        self.prizeMoney -= bank
 
     def goBankrupt(self):
         self.prizeMoney = 0
