@@ -1,55 +1,34 @@
-import random 
-
-
-class colors:
-    correctGreen = '\033[92m'
-    wrongRed = '\033[91m'
-    whiteBasic = '\033[97m'
-
-class player:
-    def __init__(self, name, bank):
-        self.name = name
-        self.bank = bank
-        self.prizes = []
-
-    def addMoney(self, bank):
-        self.prizeMoney += bank
-
-    def goBankrupt(self):
-        self.prizeMoney = 0
-
-    def addPrize(self, prize):
-        self.prizes.append(prize)
-    
-    #subtract function - for buy a vowel
-
-def getCorrectInput(uinput, min, max):
-    userinput = input(uinput)
-
-    while True:
-        try:
-            x = int(userinput)
-            if x < min:
-                errmessage = 'Must be at least {}'.format(min)
-            elif x > max:
-                errmessage = 'Must be at most {}'.format(max)
-            else:
-                return x
-        except ValueError:
-            errmessage = '{} is not a number.'.format(userinput)
-
-        userinput = input('{}\n{}'.format(errmessage, uinput))
-
-
-NumPlayers = getCorrectInput("How many players are playing?", 1, 10)
+from MultiPlayer import HumanPlayer, colors, interactions
+import random
+import os
 
 word = ["halloween", "christmas", "easter"]
 clue = ["Holiday on October 30th", "Santa Claus", "Rabbits!"]
+
+winner = False
+
 letterIDK = ""
 ENDLETTERS = ""
 
 chosenWord = random.choice(word)
 chosenClue = clue[word.index(chosenWord)]
+
+lettersGuessed = ""
+numberOfGuesses = 0
+playerSpot = 0
+
+print(".\ / \ / \ / \ /.".center(os.get_terminal_size().columns))
+print("Welcome to Wheel of Fortune".center(os.get_terminal_size().columns))
+print("./ \ / \ / \ / \.".center(os.get_terminal_size().columns))
+print(" ")
+
+NumPlayers = interactions.getCorrectInput(
+    "How many players are playing?", 1, 10)
+
+playerNumber = NumPlayers
+
+NamePlayers = [HumanPlayer(input("Enter the names of the player #{}".format(i+1)))
+               for i in range(NumPlayers)]
 
 print(chosenClue)
 
@@ -61,16 +40,29 @@ for i in guessingWord:
     letterIDK += i
 print(letterIDK)
 
-lettersGuessed = ""
-numberOfGuesses = 0
-while(numberOfGuesses <= 10):  # stop loop if guessingWord = word
+while(True):
+    player = NamePlayers[playerSpot]
+
+    # wheelPrize = interactions.spinWheel()
+
+    # if wheelPrize["type"] == "bankrupt":
+    #     player.Bankrupt()
+    # elif wheelPrize["type"] == "loseturn":
+    #     pass
+    # elif wheelPrize["type"] == "cash":
+    #     pass
+    
+    print(player)
+
     if(ENDLETTERS == chosenWord):
-        print(colors.correctGreen + "You win!" + colors.whiteBasic)
+        print(colors.Gold + "Winner" + colors.White)
         break
     numberOfGuesses += 1
-    #can't guess a letter twice
+
+    # can't guess a letter twice
+
     guess = input("Guess a letter: ")
-    letter = guess.lower()
+    letter = guess.upper()
     lettersGuessed += letter
     print(lettersGuessed)
 
@@ -78,8 +70,13 @@ while(numberOfGuesses <= 10):  # stop loop if guessingWord = word
     for i in range(len(chosenWord)):
         if chosenWord[i] == letter:
             guessingWord[i] = letter
+
     for i in guessingWord:
         ENDLETTERS += i
+
+    # Move on to the next player if everything else above passes or fails not sure where to place this at tbh
+    #playerSpot = (playerSpot + 1) % len(NamePlayers)
+
     print(ENDLETTERS)
 
-print(colors.whiteBasic)
+print(colors.White)
