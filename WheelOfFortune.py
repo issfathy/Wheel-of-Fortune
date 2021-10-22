@@ -1,61 +1,23 @@
-import random 
+from MultiPlayer import HumanPlayer, colors, interactions
+import random
+import os
 
-class colors:
-    correctGreen = '\033[92m'
-    wrongRed = '\033[91m'
-    whiteBasic = '\033[97m'
-
-class player:
-    def __init__(self, name, bank):
-        self.name = name
-        self.bank = bank
-        self.prizes = []
-
-    def addMoney(self, bank):
-        self.prizeMoney = bank - 250
-
-    def subtractMoney(self, bank):
-        self.prizeMoney -= bank
-
-    def goBankrupt(self):
-        self.prizeMoney = 0
-
-    def addPrize(self, prize):
-        self.prizes.append(prize)
-    
-    #subtract function - for buy a vowel
-
-def getCorrectInput(uinput, min, max):
-    userinput = input(uinput)
-    while True:
-        try:
-            x = int(userinput)
-            if x < min:
-                errmessage = 'Must be at least {}'.format(min)
-            elif x > max:
-                errmessage = 'Must be at most {}'.format(max)
-            else:
-                return x
-        except ValueError:
-            errmessage = '{} is not a number.'.format(userinput)
-
-        userinput = input('{}\n{}'.format(errmessage, uinput))
-
-
-# NumPlayers = getCorrectInput("How many players are playing?", 1, 10)
-
-word = ["halloween", "christmas", "easter"] # list of words
-clue = ["Holiday on October 30th", "Santa Claus", "Rabbits!"] # list of corresponding clues
-
-#variables
-lettersWdash = ""
-ENDLETTERS = ""
-guessingWord = []
 lettersGuessed = ""
-vowels = ['a', 'e', 'i', 'o', 'u']
+numberOfGuesses = 0
+playerSpot = 0
 
-chosenWord = random.choice(word) #chosen word
-chosenClue = clue[word.index(chosenWord)] #corresponding clue
+print(".\ / \ / \ / \ /.".center(os.get_terminal_size().columns))
+print("Welcome to Wheel of Fortune".center(os.get_terminal_size().columns))
+print("./ \ / \ / \ / \.".center(os.get_terminal_size().columns))
+print(" ")
+
+NumPlayers = interactions.getCorrectInput(
+    "How many players are playing?", 1, 10)
+
+playerNumber = NumPlayers
+
+NamePlayers = [HumanPlayer(input("Enter the names of the player #{}".format(i+1)))
+               for i in range(NumPlayers)]
 
 print(chosenClue)
 
@@ -67,14 +29,30 @@ for i in guessingWord:
     lettersWdash += i
 print(lettersWdash) 
 
-numberOfGuesses = 0
-while(numberOfGuesses <= 10):  # stop loop if guessingWord = word
+
+while(True):
+    player = NamePlayers[playerSpot]
+
+    # wheelPrize = interactions.spinWheel()
+
+    # if wheelPrize["type"] == "bankrupt":
+    #     player.Bankrupt()
+    # elif wheelPrize["type"] == "loseturn":
+    #     pass
+    # elif wheelPrize["type"] == "cash":
+    #     pass
+    
+    print(player)
+
     if(ENDLETTERS == chosenWord):
-        print(colors.correctGreen + "You win!" + colors.whiteBasic)
+        print(colors.Gold + "Winner" + colors.White)
         break
     numberOfGuesses += 1
-    #can't guess a letter twice
+
+    # can't guess a letter twice
+
     guess = input("Guess a letter: ")
+    
     if lettersGuessed.__contains__(guess):
         print("That letter has been guessed. Try again!")
         pass
@@ -96,4 +74,21 @@ while(numberOfGuesses <= 10):  # stop loop if guessingWord = word
             ENDLETTERS += i 
         print(ENDLETTERS) #prints out dashes including correct letters
 
-print(colors.whiteBasic)
+    letter = guess.upper()
+    lettersGuessed += letter
+    print(lettersGuessed)
+
+    ENDLETTERS = ""
+    for i in range(len(chosenWord)):
+        if chosenWord[i] == letter:
+            guessingWord[i] = letter
+
+    for i in guessingWord:
+        ENDLETTERS += i
+
+    # Move on to the next player if everything else above passes or fails not sure where to place this at tbh
+    #playerSpot = (playerSpot + 1) % len(NamePlayers)
+
+    print(ENDLETTERS)
+
+print(colors.White)
