@@ -12,7 +12,7 @@ class player:
         self.prizes = []
 
     def addMoney(self, bank):
-        self.prizeMoney = bank - 500
+        self.prizeMoney = bank - 250
 
     def subtractMoney(self, bank):
         self.prizeMoney -= bank
@@ -80,7 +80,8 @@ while(numberOfGuesses <= 10):  # stop loop if guessingWord = word
         pass
     elif vowels.__contains__(guess):
         # subtract money from bank if possible
-        print("Sorry, you don't have enough funds for a vowel.")
+        
+        # print("Sorry, you don't have enough funds for a vowel.")
         pass
     else:
         letter = guess.lower()
