@@ -91,13 +91,21 @@ class interactions:
                 return playerMove
 
     #Tested and Works
-    def spinWheel():
+    def WheelSpin():
         with open("wheel.json", 'r') as f1:
             wheel = json.loads(f1.read())
             return random.choice(wheel)
+    #Tested and Works
+    def CategoryAndPhrase():
+        with open("phrases.json", 'r') as f1:
+            phrases = json.loads(f1.read())
+
+            category = random.choice(list(phrases.keys()))
+            phrase   = random.choice(phrases[category])
+            return (category, phrase.upper())
 
     #Tested and Works
-    def winner(self):
+    def winner():
         prize = (colors.Gold + "        ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶\n" +
               "        ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶\n" +
               "   ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶\n" +
@@ -131,5 +139,3 @@ class interactions:
                                 colors.White)
         return prize
     
-    #Also get category and phrase from there as well,
-
