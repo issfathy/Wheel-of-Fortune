@@ -24,6 +24,9 @@ class PlayerBasics:
     def addMoney(self, bank):
         self.prizeMoney += bank
 
+    def vowelCost(self, bank):
+        self.prizeMoney -= VOWEL_COST
+
     def Bankrupt(self):
         self.prizeMoney = 0
 
@@ -33,7 +36,7 @@ class PlayerBasics:
     def __str__(self):
         return "{} (${})".format(self.name,self.prizeMoney)
 
-class HumanPlayer(PlayerBasics):
+class PLayerMove(PlayerBasics):
 
     def __init(self,name):
         PlayerBasics.__ini__(self,name)
@@ -41,16 +44,16 @@ class HumanPlayer(PlayerBasics):
     def getMove(self,category, phrase, guessed):
         print("{} has (${})".format(self.name,self.prizeMoney))
 
-        print("Category:",category)
-        print("Phrase:",phrase)
-        print("Guessed:",guessed)
+        print("Category:",category + "\n")
+        print("Phrase:",phrase + "\n")
+        print("Guessed:",guessed + "\n")
 
-        theChoose = str(input("Guess a letter, phrase, or type ('Leave' or 'Pass'): "))
+        theChoose = str(input("Guess a letter, phrase, or ('Quit'-To quit match or 'Pass'-Move to the next player):"))
         return theChoose
 
 class interactions:
     #Tested and Works
-    def getCorrectInput(uinput, min, max):
+    def AmountPlaying(uinput, min, max):
         userinput = input(uinput)
 
         while True:
@@ -66,33 +69,20 @@ class interactions:
                 errmessage = '{} is not a number.'.format(userinput)
 
             userinput = input('{}\n{}'.format(errmessage, uinput))
-
-    def requestMove(player, category, guessed):
-        #Need to included Bibin phrase guessing
-        while True:
-            playerMove = player.getMove(category, guessed)
-            playerMove = playerMove.lower()
-
-            if playerMove == 'exit' or playerMove == 'pass':
-                return playerMove
-            elif len(playerMove) == 1:
-                if playerMove not in LETTERS:
-                    print("Your Guess should be a letter. Please try again")
-                    continue
-                elif playerMove in guessed:
-                    print("{} is already guessed bud. Try again.".format(playerMove))
-                    continue
-                elif playerMove in VOWELS and player.prizeMoney < VOWEL_COST: # if it's a vowel, we need to be sure the player has enough
-                    print('Need ${} to guess a vowel. Try again.'.format(VOWEL_COST))
-                    continue
-                else:
-                    return playerMove
+    #IDK
+    def hidePhrase(phrase, guessed):
+        input = ""
+        for i in phrase:
+            if(i in LETTERS) and (i not in guessed):
+                input = input+"_ "
             else:
-                return playerMove
+                input = input+i
+        return input
 
     #Tested and Works
     def WheelSpin():
         with open("wheel.json", 'r') as f1:
+
             wheel = json.loads(f1.read())
             return random.choice(wheel)
     #Tested and Works
