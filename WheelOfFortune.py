@@ -1,9 +1,10 @@
 from MultiPlayer import PlayerMove, colors, interactions
 import random
 import os
+import time
 
-#Setting variables for basics 
-LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+# Setting variables for basics
+LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXZYZ'
 VOWELS = 'AEIOU'
 VOWELS_COST = 250
 ENDLETTERS = ""
@@ -11,127 +12,155 @@ ENDLETTERS = ""
 playerSpot = 0
 guessingWord = []
 lettersdash = ""
+letterguessed = []
+guessedSoFar = ""
 
-#Setting category and phrase from the json files
+# Setting category and phrase from the json files
 category, phrase = interactions.CategoryAndPhrase()
 
-#Start the entire game with a nice introduction
+for i in phrase:
+    if LETTERS.__contains__(i):
+        guessingWord.append('_')
+    else:
+        guessingWord.append(i)
+        
+for i in guessingWord:
+    lettersdash += i
+
+# Start the entire game with a nice introduction
 print(".\ / \ / \ / \ /.".center(os.get_terminal_size().columns))
 print("Welcome to Wheel of Fortune".center(os.get_terminal_size().columns))
 print("./ \ / \ / \ / \.".center(os.get_terminal_size().columns))
 print(" ")
 
-#Get the amount of players that are going to play
+# Get the amount of players that are going to play
 NumPlayers = interactions.AmountPlaying(
-    "How many players are playing?", 1, 5)
+    "How many players are playing? ", 1, 5)
 
-#Get the names of the players plus saving them into playermove to be able to use getMove()
-#Having a loop so it keeps popping up until Number of players is exceeded
-NamePlayers = [PlayerMove(input("Enter the names of the player #{}".format(i+1)))
+# Get the names of the players plus saving them into playermove to be able to use getMove()
+# Having a loop so it keeps popping up until Number of players is exceeded
+NamePlayers = [PlayerMove(input("Enter the names of the player # {} ".format(i+1)))
                for i in range(NumPlayers)]
 
-#For testing purposes
+# For testing purposes
+Gamewinner = False
 
-print(phrase)
+print("\n" + "This is the word to be guessed", phrase)
 
-def requestMove(player, category, guessed):
-    while True:
-        playerMove = player.getMove(category, interactions.hidePhrase(phrase, guessed), guessed)
-        playerMove = playerMove.upper()
-
-        if playerMove == 'QUIT' or playerMove == 'PASS':
-            return playerMove
-        elif len(playerMove) == 1:
-            if playerMove not in LETTERS:
-                print("Your Guess should be a letter. Please try again")
-                continue
-            elif playerMove in guessed:
-                print("{} is already guessed bud. Try again.".format(playerMove))
-                continue
-            # if it's a vowel, we need to be sure the player has enough to be able to buy
-            elif playerMove in VOWELS and player.prizeMoney < VOWELS_COST:
-                print('Need ${} to guess a vowel. Try again.'.format(VOWELS_COST))
-            #if the letter guessed is within that chosen word, replace the dash with letter.    
-                continue
-            else:
-                return playerMove
-        else:
-            return playerMove
-
-letterguessed = []
-
+print("Phrase: " + lettersdash)
 while(True):
     player = NamePlayers[playerSpot]
-
-    guess = input("Guess a letter: ")
+    print(player)
 
     wheel = interactions.WheelSpin()
 
     if wheel["type"] == "bankrupt":
         player.Bankrupt()
+        time.sleep(1)
+        print("Player spun bankrupt")
+
     elif wheel["type"] == "loseturn":
+        print("Player spun lose a turn")
+        time.sleep(1)
         pass
     elif wheel["type"] == "cash":
-        playerMove = requestMove(player, category)
-        if(playerMove == 'QUIT'):
+        print("Player spun cash prize ${}".format(wheel["value"]))
+        time.sleep(1)
+
+        guess = input(
+            "Guess a letter, phrase, or ('Quit'-To quit match or 'Pass'-Move to the next player): ")
+        guess = guess.upper()
+
+        if(guess == 'QUIT'):
             print("I'll see you next time")
             break
-        elif(playerMove == 'PASS'):
+        elif(guess == 'PASS'):
             print("{} decided to skip to the next player".format(player.name))
             pass
-        elif len(playerMove) == 1:
-            letterguessed.append(playerMove)
 
-            if(playerMove.__contains__(VOWELS)):
+        elif(len(guess) == 1):
+            letterguessed.append(guess)
+            guessedSoFar = ""
+
+            # if guess in letterguessed:
+            #     print("{} has already been guessed, let's try this again".format(guess))
+            #     continue
+
+            if(VOWELS.__contains__(guess) and player.prizeMoney < VOWELS_COST):
+                print("Need ${} to guess a vowel, let's try again".format(VOWELS_COST))
+                continue
+            else:
                 player.vowelCost()
-            pass
 
-            count = phrase.count(playerMove)
-            player.addMoney(wheel['value'] * count)
-            if(player.prizes is not False):
-                player.addPrize(wheel['prize'])
+            for i in letterguessed:
+                guessedSoFar += i
 
-    playerSpot = (playerSpot + 1) % len(NamePlayers)        
-    print(player)
+            print("LETTERS GUESSED SO FAR: ", guessedSoFar)
 
-    # if(ENDLETTERS == phrase):
-    #     print(colors.Gold + "Winner" + colors.White)
-    #     break
+            for i in range(len(phrase)):
+                if phrase[i] == guess:
+                    guessingWord[i] = guess
+                else:
+                    pass
 
-    # # can't guess a letter twice
+            ENDLETTERS = ""
+            for i in guessingWord:
+                ENDLETTERS += i
 
-    # if lettersGuessed.__contains__(guess):
-    #     print("That letter has been guessed. Try again!")
-    #     pass
-    # elif VOWELS.__contains__(guess):
-    #     # subtract money from bank if possible
+            count = phrase.count(guess)
+            if(count > 0):
+                if(count == 1):
+                    print("There is one {}. Great Job".format(guess))
+                else:
+                    print("There are {} {}'s. Nice one".format(count, guess))
 
-    #     # print("Sorry, you don't have enough funds for a vowel.")
-    #     pass
-    # else:
-    #     letter = guess.upper()
-    #     lettersGuessed += letter + ' '
-    #     print("These letters have been guessed:", lettersGuessed)
+                # Give them the money and the prizes
+                player.addMoney(count * wheel['value'])
+                if wheel['prize']:
+                    player.addPrize(wheel['prize'])
 
-    #     ENDLETTERS = ""
-    #     for i in range(len(phrase)):
-    #         if phrase[i] == letter:
-    #             guessingWord[i] = letter
-    #     for i in guessingWord:
-    #         ENDLETTERS += i
-    #     print(ENDLETTERS)  # prints out dashes including correct letters
+                # all of the letters have been guessed
+                if ENDLETTERS == phrase:
+                    winner = player
+                    break
 
-    # ENDLETTERS = ""
-    # for i in range(len(phrase)):
-    #     if phrase[i] == letter:
-    #         guessingWord[i] = letter
+                print("WORD SO FAR: ", ENDLETTERS)
+                continue  # this player gets to go again
 
-    # for i in guessingWord:
-    #     ENDLETTERS += i
+            elif count == 0:
+                print("There are no {} in this phrase".format(guess))
 
-    # # Move on to the next player if everything else above passes or fails not sure where to place this at tbh
-    # #playerSpot = (playerSpot + 1) % len(NamePlayers)
+            # prints out dashes including correct letters
 
-    # print(ENDLETTERS)
+        if len(guess) > 1:
+            if(guess == phrase):
+                Gamewinner = player
+
+                count = phrase.count(guess)
+                player.addMoney(wheel['value'] * count)
+                if wheel['prize']:
+                    player.addPrize(wheel['prize'])
+                break
+            else:
+                print("PHRASE IS WRONG")
+                pass
+
+    # print("WORD SO FAR: ", ENDLETTERS) #prints out dashes including correct letters
+    playerSpot = (playerSpot + 1) % len(NamePlayers)
+
+if Gamewinner:
+    time.sleep(1)
+    print(interactions.winner())
+
+    print('{} wins! The phrase was {}'.format(Gamewinner.name, phrase))
+    print('Their prize money won is ${}'.format(Gamewinner.prizeMoney))
+
+    if Gamewinner.prizes:
+        print('{} also won:'.format(Gamewinner.name))
+        for prize in Gamewinner.prizes:
+            print('    - {}'.format(prize))
+else:
+    print('Noone has won. The phrase was {}'.format(phrase))
+    print('Better luck next time bozo')
 
 print(colors.White)

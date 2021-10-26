@@ -18,13 +18,13 @@ class colors:
 class PlayerBasics:
     def __init__(self , name):
         self.name = name
-        self.prizeMoney = 0
+        self.prizeMoney = 250
         self.prizes = []
 
     def addMoney(self, bank):
         self.prizeMoney += bank
 
-    def vowelCost(self, bank):
+    def vowelCost(self):
         self.prizeMoney -= VOWEL_COST
 
     def Bankrupt(self):
@@ -36,20 +36,19 @@ class PlayerBasics:
     def __str__(self):
         return "{} (${})".format(self.name,self.prizeMoney)
 
-class PLayerMove(PlayerBasics):
+class PlayerMove(PlayerBasics):
 
     def __init(self,name):
         PlayerBasics.__ini__(self,name)
-
-    def getMove(self,category, phrase, guessed):
+    #Will be used later, taking inputs and displaying different Category, Phrase, and Guessed
+    def playerMove(self,category, phrase, guessed):
         print("{} has (${})".format(self.name,self.prizeMoney))
 
         print("Category:",category + "\n")
         print("Phrase:",phrase + "\n")
         print("Guessed:",guessed + "\n")
 
-        theChoose = str(input("Guess a letter, phrase, or ('Quit'-To quit match or 'Pass'-Move to the next player):"))
-        return theChoose
+        return "okay"
 
 class interactions:
     #Tested and Works
@@ -69,25 +68,27 @@ class interactions:
                 errmessage = '{} is not a number.'.format(userinput)
 
             userinput = input('{}\n{}'.format(errmessage, uinput))
-    #IDK
+
+    #Tested and will be used for later purposes
     def hidePhrase(phrase, guessed):
         input = ""
         for i in phrase:
             if(i in LETTERS) and (i not in guessed):
-                input = input+"_ "
+                input += "_"
             else:
                 input = input+i
         return input
 
     #Tested and Works
     def WheelSpin():
-        with open("wheel.json", 'r') as f1:
+        with open("Wheel.json", 'r') as f1:
 
             wheel = json.loads(f1.read())
             return random.choice(wheel)
+
     #Tested and Works
     def CategoryAndPhrase():
-        with open("phrases.json", 'r') as f1:
+        with open("Phrases.json", 'r') as f1:
             phrases = json.loads(f1.read())
 
             category = random.choice(list(phrases.keys()))
