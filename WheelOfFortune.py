@@ -45,15 +45,15 @@ NamePlayers = [PlayerMove(input("Enter the names of the player # {} ".format(i+1
 # When the game winner is found it would turn this into True
 Gamewinner = False
 
-# For Testing purposes
-print("\n" + "This is the word to be guessed", phrase)
+
 
 # Displaying the ads
 ads = interactions.displayAds()
 # ads()
 
 while(True):
-
+    # For Testing purposes
+    print("\n" + "This is the word to be guessed", phrase)    
     if(ENDLETTERS == ""):
         print("WORDS SO FAR: " + lettersdash)
     else:
@@ -66,19 +66,19 @@ while(True):
     if wheel["type"] == "bankrupt":
         player.Bankrupt()
         time.sleep(1)
-        print("Player spun bankrupt")
+        print("Player {} spun bankrupt".format(player.name))
 
     elif wheel["type"] == "loseturn":
-        print("Player spun lose a turn")
+        print("Player {} spun lose a turn".format(player.name))
         time.sleep(1)
         pass
     elif wheel["type"] == "cash":
         print("Player spun cash prize ${}".format(wheel["value"]))
         print(player)
-        print("\n")
         time.sleep(1)
 
         guess = input("Guess a letter, phrase, or ('Quit'-To quit match or 'Pass'-Move to the next player): ")
+        print("\n")
         guess = guess.upper()
 
         if(guess == 'QUIT'):
@@ -89,7 +89,7 @@ while(True):
             pass
         elif(len(guess) == 1):
             if letterguessed.__contains__(guess):
-                print("{} has already been guessed, let's try this again".format(guess))
+                print("{} has already been guessed".format(guess))
                 playerSpot = (playerSpot + 1) % len(NamePlayers)
                 continue
             pass     
