@@ -2,10 +2,12 @@ import json
 import random
 import time
 import os
+from tkinter import *
+import webbrowser
 
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-VOWELS = 'AEIOU'
-VOWEL_COST = 250
+VOWELS  = 'AEIOU'
+VOWEL_COST  = 250
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
@@ -14,6 +16,8 @@ class colors:
     Red = '\033[91m'
     White = '\033[97m'
     Gold = '\033[33m'
+    adsgolden = '#f5c842' # set your favourite rgb color
+    adsgreen = '#009e2d'
     
 class PlayerBasics:
     def __init__(self , name):
@@ -41,21 +45,11 @@ class PlayerMove(PlayerBasics):
     def __init(self,name):
         PlayerBasics.__ini__(self,name)
 
-    def getMove(self,category, phrase, guessed):
-        print("{} has (${})".format(self.name,self.prizeMoney))
-
-        print("Category:",category + "\n")
-        print("Phrase:",phrase + "\n")
-        print("Guessed:",guessed)
-
-        theChoose = str(input("Guess a letter, phrase, or ('Quit'-To quit match or 'Pass'-Move to the next player):"))
-        return theChoose
-
 class interactions:
     #Tested and Works
     def AmountPlaying(uinput, min, max):
-        userinput = input(uinput).upper()
-        
+        userinput = input(uinput)
+
         while True:
             try:
                 x = int(userinput)
@@ -69,32 +63,51 @@ class interactions:
                 errmessage = '{} is not a number.'.format(userinput)
 
             userinput = input('{}\n{}'.format(errmessage, uinput))
-
-    #guessed is ALL THE LETTERS
-    def hidePhrase(phrase, guessed):
-        input = ""
-        for i in phrase:
-            if(i in LETTERS) and (i not in guessed):
-                input += "_"
-            else:
-                input = input+i
-        return input
-
+            
     #Tested and Works
     def WheelSpin():
-        with open("wheel.json", 'r') as f1:
+        with open("Wheel.json", 'r') as f1:
 
             wheel = json.loads(f1.read())
             return random.choice(wheel)
+
     #Tested and Works
     def CategoryAndPhrase():
-        with open("phrases.json", 'r') as f1:
+        with open("Phrases.json", 'r') as f1:
             phrases = json.loads(f1.read())
 
             category = random.choice(list(phrases.keys()))
             phrase   = random.choice(phrases[category])
             return (category, phrase.upper())
 
+    def ads():
+        with open("ads.json", 'r') as f1:
+            ads = json.loads(f1.read())
+
+            return random.choice(ads)
+
+    def displayAds():
+        window = Tk()
+        window.configure(bg=colors.adsgolden)
+        window.title("A Quick Break")
+        window.geometry("450x100")
+        
+        ads = interactions.ads()
+        adsText = ads['text']
+        url = ads['urlLink']
+        adstype = ads['type']
+
+        def onClick(x):
+            webbrowser.open(x,new=1)
+
+        label = Label(text = adsText, bg=colors.adsgolden, font=("Comic Sans MS", 16, "bold"))
+        label.pack()
+        labelOne = Label(text="A word from our sponsor", font=("Arial", 10), bg=colors.adsgolden)
+        labelOne.pack()
+
+        click = Button(window, bg=colors.adsgreen, text = adstype, command = lambda: onClick(url))
+        click.pack()
+        window.mainloop()
     #Tested and Works
     def winner():
         prize = (colors.Gold + "        ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶\n" +
