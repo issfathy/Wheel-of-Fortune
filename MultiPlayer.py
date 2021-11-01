@@ -4,8 +4,8 @@ import time
 import os
 
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-VOWELS  = 'AEIOU'
-VOWEL_COST  = 250
+VOWELS = 'AEIOU'
+VOWEL_COST = 250
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
@@ -40,21 +40,22 @@ class PlayerMove(PlayerBasics):
 
     def __init(self,name):
         PlayerBasics.__ini__(self,name)
-    #Will be used later, taking inputs and displaying different Category, Phrase, and Guessed
-    def playerMove(self,category, phrase, guessed):
+
+    def getMove(self,category, phrase, guessed):
         print("{} has (${})".format(self.name,self.prizeMoney))
 
         print("Category:",category + "\n")
         print("Phrase:",phrase + "\n")
-        print("Guessed:",guessed + "\n")
+        print("Guessed:",guessed)
 
-        return "okay"
+        theChoose = str(input("Guess a letter, phrase, or ('Quit'-To quit match or 'Pass'-Move to the next player):"))
+        return theChoose
 
 class interactions:
     #Tested and Works
     def AmountPlaying(uinput, min, max):
-        userinput = input(uinput)
-
+        userinput = input(uinput).upper()
+        
         while True:
             try:
                 x = int(userinput)
@@ -69,7 +70,7 @@ class interactions:
 
             userinput = input('{}\n{}'.format(errmessage, uinput))
 
-    #Tested and will be used for later purposes
+    #guessed is ALL THE LETTERS
     def hidePhrase(phrase, guessed):
         input = ""
         for i in phrase:
@@ -81,14 +82,13 @@ class interactions:
 
     #Tested and Works
     def WheelSpin():
-        with open("Wheel.json", 'r') as f1:
+        with open("wheel.json", 'r') as f1:
 
             wheel = json.loads(f1.read())
             return random.choice(wheel)
-
     #Tested and Works
     def CategoryAndPhrase():
-        with open("Phrases.json", 'r') as f1:
+        with open("phrases.json", 'r') as f1:
             phrases = json.loads(f1.read())
 
             category = random.choice(list(phrases.keys()))
