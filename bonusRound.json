@@ -1,0 +1,68 @@
+[
+    {
+        "type": "cash",
+        "text": "$1,000",
+        "value": 1000,
+        "prize": "A trip to Ann Arbor!"
+    },
+    {
+        "type": "cash",
+        "text": "$2500",
+        "value": 2500,
+        "prize": false
+    },
+    {
+        "type": "cash",
+        "text": "$3000",
+        "value": 3000,
+        "prize": false
+    },
+    {
+        "type": "cash",
+        "text": "$4000",
+        "value": 4000,
+        "prize": false
+    },
+    {
+        "type": "cash",
+        "text": "$5000",
+        "value": 5000,
+        "prize": false
+    },
+    {
+        "type": "cash",
+        "text": "$8000",
+        "value": 8000,
+        "prize": false
+    },
+    {
+        "type": "cash",
+        "text": "One Million",
+        "value": 1000000,
+        "prize": false
+    },
+    {
+        "type": "cash",
+        "text": "$100000",
+        "value": 100000,
+        "prize": "A brand new car!"
+    },
+    {
+        "type": "cash",
+        "text": "9000",
+        "value": 9000,
+        "prize": false
+    },
+    {
+        "type": "cash",
+        "text": "$7000",
+        "value": 7000,
+        "prize": false
+    },
+    {
+        "type": "cash",
+        "text": "$10000",
+        "value": 10000,
+        "prize": false
+    }
+]

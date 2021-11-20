@@ -1,13 +1,7 @@
 # Wheel of Fortune Python Project
-from MultiPlayer import PlayerBasics, PlayerMove, colors, interactions
-from partsOfGame import game, ads, bonus
+from MultiPlayer import PlayerMove, interactions
+from WOFGame import game, bonus, tossup
 import os
-import time
-import random
-
-# Setting variables for basic Tasks
-LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-VOWELS = 'AEIOU'
 
 # Start the entire game with a nice introduction
 print(" ")
@@ -26,27 +20,34 @@ NumPlayers = interactions.AmountPlaying(
 NamePlayers = [PlayerMove(input("Enter the names of the player # {} ".format(i+1)))
                for i in range(NumPlayers)]
 
-# bonus(NamePlayers)
-# userChoices
+def FinalWinner():
+    FinalWinner = None
+    for i in range(NumPlayers):
+            NamePlayers[i].RoundBank
+            #print("{}: ".format(i), NamePlayers[i].__str__())
 
-# ads
+            if NamePlayers[i].RoundBank > NamePlayers[1].RoundBank:
+                FinalWinner = NamePlayers[i].name
+            elif NumPlayers == 3:
+                if NamePlayers[1].RoundBank > NamePlayers[2].RoundBank:
+                    FinalWinner = NamePlayers[i].name
 
-# game
+    print("\n")
+    print("The overall winner is {}".format(FinalWinner))
+    return FinalWinner
 
-# bonus
-
+print("\n")
 for i in range(5):
     if i == 0:
-        print("Now playing toss up")
+        print("Now Playing Toss up")
+        tossup(NumPlayers,NamePlayers)
     elif i == 1 or i == 2 or i == 3:
         print("Starting round ", i)
         game(NumPlayers,NamePlayers)
     else:
-        bonus(NamePlayers)
+        FinalWinner()
+        bonus(FinalWinner)
 
-# #bonus(NamePlayers)
-
-# print(colors.White)
 
 '''
 THINGS TO FIX:

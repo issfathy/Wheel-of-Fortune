@@ -1,6 +1,5 @@
 # Wheel of Fortune Python Project 
-from MultiPlayer import PlayerMove, colors, interactions
-import os
+from MultiPlayer import PlayerBasics, colors, interactions
 import time
 import random
 
@@ -26,7 +25,7 @@ def tossup(Num,Name):
     letterIndex =[]
 
     while(True):
-        ## CAN BE DELETED BEFORE submitted
+        ## CAN BE DELETED BEFORE submitted, (Add print("\n"))
         print("This is the word to be guess", phrase)
         #random generator of numbers from - to len(guessingWord)
         value = random.randint(0, len(phrase) - 1)
@@ -76,42 +75,6 @@ def tossup(Num,Name):
         if len(letterIndex) == len(phrase):
             print("No one guessed on this round of toss up")
             break
-
-def userChoices(phrase, lettersdash):
-    guessingWChoices = []
-    choices = []
-
-    for i in range(3):
-        while(True):
-            con = input("Choose a consonant: ")
-            if(VOWELS.__contains__(con.upper())):
-                pass
-            else:
-                choices.append(con)
-                break
-    while(True):
-        vowel = input("Choose a vowel: ")
-        if(VOWELS.__contains__(vowel.upper()) == False):
-            pass
-        else:
-            choices.append(vowel)
-            break
-    
-    for i in phrase:
-        if i == 'R' or i == 'S' or i == 'T' or i == 'L' or i == 'N' or i == 'E':
-            guessingWChoices.append(i)
-        if i == choices[0].upper() or i == choices[1].upper() or i == choices[2].upper() or i == choices[3].upper():
-            guessingWChoices.append(i)
-        elif LETTERS.__contains__(i):
-            guessingWChoices.append('_')
-        else:
-            guessingWChoices.append(i)
-    lettersdash = " "
-
-    for i in guessingWChoices:
-        lettersdash += i
-
-    return lettersdash
 
 def ads():
     # Displaying the ads
@@ -254,8 +217,9 @@ def game(Num,NamePlayers):
                     pass
 
         playerSpot = (playerSpot + 1) % len(NamePlayers)
+        print(colors.Red)
         print("//////////////// End of Turn ////////////////")
-
+        print(colors.White)
 
     if Gamewinner:
         time.sleep(1)
@@ -279,7 +243,45 @@ def game(Num,NamePlayers):
         print('Noone has won. The phrase was {}'.format(phrase))
         print('Better luck next time')
 
-def bonus(NamePlayers): # only the winner
+def userChoices(phrase, lettersdash):
+    guessingWChoices = []
+    choices = []
+
+    for i in range(3):
+        while(True):
+            con = input("Choose a consonant: ")
+            if(VOWELS.__contains__(con.upper())):
+                pass
+            else:
+                choices.append(con)
+                break
+    while(True):
+        vowel = input("Choose a vowel: ")
+        if(VOWELS.__contains__(vowel.upper()) == False):
+            pass
+        else:
+            choices.append(vowel)
+            break
+    
+    for i in phrase:
+        if i == 'R' or i == 'S' or i == 'T' or i == 'L' or i == 'N' or i == 'E':
+            guessingWChoices.append(i)
+        if i == choices[0].upper() or i == choices[1].upper() or i == choices[2].upper() or i == choices[3].upper():
+            guessingWChoices.append(i)
+        elif LETTERS.__contains__(i):
+            guessingWChoices.append('_')
+        else:
+            guessingWChoices.append(i)
+    lettersdash = " "
+
+    for i in guessingWChoices:
+        lettersdash += i
+
+    return lettersdash
+
+    
+def bonus(Winner): # only the winner
+    print("\n")
     print("YOU'VE ENTERED THE BONUS ROUND")
     # Setting category and phrase from the json files
     category, phrase = interactions.CategoryAndPhrase()
@@ -321,22 +323,11 @@ def bonus(NamePlayers): # only the winner
         else:
             print("WORDS SO FAR: " + ENDLETTERS)
 
-        player = NamePlayers[playerSpot]
+        wheel = interactions.BonusSpin()
 
-        wheel = interactions.WheelSpin()
-
-        if wheel["type"] == "bankrupt":
-            player.Bankrupt()
-            time.sleep(1)
-            print("Player {} spun bankrupt".format(player.name))
-
-        elif wheel["type"] == "loseturn":
-            print("Player {} spun lose a turn".format(player.name))
-            time.sleep(1)
-            pass
-        elif wheel["type"] == "cash":
-            print("Player spun cash prize ${}".format(wheel["value"]))
-            print(player)
+        if wheel["type"] == "cash":
+            print(Winner.__str__)
+            print("\n")
             time.sleep(1)
 
             guess = input("Guess a letter, phrase, or ('Quit'-To quit match or 'Pass'-Move to the next player): ")
@@ -347,23 +338,17 @@ def bonus(NamePlayers): # only the winner
                 print("I'll see you next time")
                 break
             elif(guess == 'PASS'):
-                print("{} decided to skip to the next player".format(player.name))
+                print("{} decided to skip to the next player".format(Winner.name))
                 pass
             elif(len(guess) == 1):
                 if letterguessed.__contains__(guess):
                     print("{} has already been guessed".format(guess))
-                    playerSpot = (playerSpot + 1) % len(NamePlayers)
+                    playerSpot = (playerSpot + 1) % len(Winner)
                     continue
                 pass     
 
                 letterguessed.append(guess)
                 guessedSoFar = ""
-
-                if(VOWELS.__contains__(guess) and player.prizeMoney < VOWELS_COST):
-                    print("Need ${} to guess a vowel, let's try again".format(VOWELS_COST))
-                    continue
-                elif(VOWELS.__contains__(guess) and player.prizeMoney > VOWELS_COST):
-                    player.vowelCost()
 
                 for i in letterguessed:
                     guessedSoFar += i
@@ -388,32 +373,47 @@ def bonus(NamePlayers): # only the winner
                         print("There are {} {}'s. Nice one".format(count, guess))
 
                     # Give them the money and the prizes
-                    player.addMoney(count * wheel['value'])
+                    Winner.addMoney(count * wheel['value'])
                     if wheel['prize']:
-                        player.addPrize(wheel['prize'])
+                        Winner.addPrize(wheel['prize'])
 
                     # all of the letters have been guessed
                     if ENDLETTERS == phrase:
-                        Gamewinner = player
+                        Gamewinner = Winner
                         break
 
                     continue  # this player gets to go again
 
                 elif count == 0:
                     print("There are no {} in this phrase".format(guess))
+                    continue
 
             if len(guess) > 1:
                 if(guess == phrase):
-                    Gamewinner = player
+                    Gamewinner = Winner
 
                     count = phrase.count(guess)
-                    player.addMoney(wheel['value'] * count)
+                    Gamewinner.addMoney(wheel['value'] * count)
                     if wheel['prize']:
-                        player.addPrize(wheel['prize'])
+                        Winner.addPrize(wheel['prize'])
                     break
                 else:
                     print("PHRASE IS WRONG")
                     pass
+    if Gamewinner:
+        time.sleep(1)
+        print(interactions.winner())
 
-        playerSpot = (playerSpot + 1) % len(NamePlayers)
-        print("//////////////// End of Turn ////////////////")
+        print('{} wins! The phrase was {}'.format(Gamewinner.name, phrase))
+
+        print('Their prize money won is ${}'.format(Gamewinner.prizeMoney))
+
+        print('{}'.format(Gamewinner.__str__()))
+
+    if Gamewinner.prizes:
+        print('{} also won:'.format(Gamewinner.name))
+        for prize in Gamewinner.prizes:
+            print('    - {}'.format(prize))
+    else:
+        print('Noone has won. The phrase was {}'.format(phrase))
+        print('Better luck next time')
