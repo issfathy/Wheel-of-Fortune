@@ -30,8 +30,9 @@
 - Phrases - is where the category and phrase are chosen from, we decided to norrow it down so it looks cleaner  
 - bonusRound - is the wheel used for the bonus round
 - ads - is used to display different ads before each round
-This project was completed with the help of Bibin Benny, Shreya Sanjiv, and Fathy Elhadidy from La Salle Univeristy. 
 
 ## Issues Encountered:
 - We have tried to implement a wheel but could not find a successful way to do so but we did come close. 
 - We also encountered a difficulty with creating a timer that did not care about a user input but instead kept counting until the time ran out 
+
+# This project was completed with the help of Bibin Benny, Shreya Sanjiv, and Fathy Elhadidy from La Salle Univeristy. 
