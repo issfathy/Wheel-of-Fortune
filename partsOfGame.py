@@ -226,22 +226,23 @@ def game(Num,NamePlayers):
         print(interactions.winner())
         player.addRoundMoney(Gamewinner.prizeMoney)
 
-        for i in range(Num):
-            NamePlayers[i].Bankrupt()
-            print("{}: ".format(i), NamePlayers[i].__str__())
         print('{} wins! The phrase was {}'.format(Gamewinner.name, phrase))
 
         print('Their prize money won is ${}'.format(Gamewinner.prizeMoney))
 
         print('{}'.format(Gamewinner.__str__()))
 
+        for i in range(Num):
+            NamePlayers[i].Bankrupt()
+            print("{}: ".format(i), NamePlayers[i].__str__())
+    else:
+        print('Noone has won. The phrase was {}'.format(phrase))
+        print('Better luck next time')
+
     if Gamewinner.prizes:
         print('{} also won:'.format(Gamewinner.name))
         for prize in Gamewinner.prizes:
             print('    - {}'.format(prize))
-    else:
-        print('Noone has won. The phrase was {}'.format(phrase))
-        print('Better luck next time')
 
 def userChoices(phrase, lettersdash):
     guessingWChoices = []
@@ -326,7 +327,7 @@ def bonus(Winner): # only the winner
         wheel = interactions.BonusSpin()
 
         if wheel["type"] == "cash":
-            print(Winner.__str__)
+            print(Winner)
             print("\n")
             time.sleep(1)
 
@@ -405,15 +406,14 @@ def bonus(Winner): # only the winner
         print(interactions.winner())
 
         print('{} wins! The phrase was {}'.format(Gamewinner.name, phrase))
-
-        print('Their prize money won is ${}'.format(Gamewinner.prizeMoney))
+        print('Their prize money won is ${}'.format(Gamewinner.RoundBank))
 
         print('{}'.format(Gamewinner.__str__()))
+    else:
+        print('Noone has won. The phrase was {}'.format(phrase))
+        print('Better luck next time')
 
     if Gamewinner.prizes:
         print('{} also won:'.format(Gamewinner.name))
         for prize in Gamewinner.prizes:
             print('    - {}'.format(prize))
-    else:
-        print('Noone has won. The phrase was {}'.format(phrase))
-        print('Better luck next time')

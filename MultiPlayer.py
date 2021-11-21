@@ -19,7 +19,6 @@ class PlayerBasics:
     def __init__(self , name):
         self.name = name
         # Can 0 it out before submitting
-        self.zero = 0
         self.prizeMoney = 250
         self.RoundBank = 0
         self.prizes = []
@@ -78,7 +77,7 @@ class interactions:
             
             wheelRand = random.choice(wheel)
 
-            time.sleep(0.5)    
+            time.sleep(0.2)    
             if wheelRand["type"] == "cash":
                 print("${}".format(wheelRand["value"]))
             elif wheelRand["type"] == "bankrupt":
@@ -97,7 +96,7 @@ class interactions:
             
             wheelRand = random.choice(wheel)
 
-            time.sleep(0.5)    
+            time.sleep(0.2)    
             if wheelRand["type"] == "cash":
                 print("${}".format(wheelRand["value"]))
             

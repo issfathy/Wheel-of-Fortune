@@ -1,6 +1,6 @@
 # Wheel of Fortune Python Project
 from MultiPlayer import PlayerMove, interactions
-from WOFGame import game, bonus, tossup
+from partsOfGame import game, bonus, tossup
 import os
 
 # Start the entire game with a nice introduction
@@ -27,10 +27,10 @@ def FinalWinner():
             #print("{}: ".format(i), NamePlayers[i].__str__())
 
             if NamePlayers[i].RoundBank > NamePlayers[1].RoundBank:
-                FinalWinner = NamePlayers[i].name
+                FinalWinner = NamePlayers[i]
             elif NumPlayers == 3:
                 if NamePlayers[1].RoundBank > NamePlayers[2].RoundBank:
-                    FinalWinner = NamePlayers[i].name
+                    FinalWinner = NamePlayers[i]
 
     print("\n")
     print("The overall winner is {}".format(FinalWinner))
@@ -45,8 +45,8 @@ for i in range(5):
         print("Starting round ", i)
         game(NumPlayers,NamePlayers)
     else:
-        FinalWinner()
-        bonus(FinalWinner)
+        final = FinalWinner()
+        bonus(final)
 
 
 '''
