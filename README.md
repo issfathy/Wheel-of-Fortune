@@ -1,5 +1,5 @@
 #                                      The Best Wheel of Fortune Project Ever
-
+### This wheel includes a tossup and bonus round, everything that others don't have
 ## Multiplayer.py file has different classes:
 
 
