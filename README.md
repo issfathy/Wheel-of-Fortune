@@ -24,8 +24,12 @@
 - FinalWinner - determines the final winner for the bonus round
 - Lastly there is a loop going over everything discussed above 
 
+## Json files
 
-
+- Wheel - is the main wheel being spun every time a player goes to guess a letter
+- Phrases - is where the category and phrase are chosen from, we decided to norrow it down so it looks cleaner  
+- bonusRound - is the wheel used for the bonus round
+- ads - is used to display different ads before each round
 This project was completed with the help of Bibin Benny, Shreya Sanjiv, and Fathy Elhadidy from La Salle Univeristy. 
 
 ## Issues Encountered:
