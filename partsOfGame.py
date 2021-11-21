@@ -2,6 +2,7 @@
 from MultiPlayer import PlayerBasics, colors, interactions
 import time
 import random
+import json
 
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 VOWELS = 'AEIOU'
@@ -38,6 +39,7 @@ def tossup(Num,Name):
             time.sleep(1)
             print(*guessingWord)
             answer = input("Type 'A' to guess the phrase or Press 'Enter' to continue: ")
+            print("\n")
             answer = answer.upper()
 
             if answer == " ":
@@ -45,6 +47,7 @@ def tossup(Num,Name):
             elif answer == "A":
                 for i in range(Num):
                     print("{}: ".format(i), Name[i].listPlayer())
+                    
                 time.sleep(1)
                 PlayerGuess = input("Which player is guessing? e.g. 0,1,2: ")
                 player = Name[int(PlayerGuess)]
@@ -63,7 +66,7 @@ def tossup(Num,Name):
                     player.addMoney(2000)
 
                     print(colors.Green)
-                    print(player.listPlayer())
+                    print(player.__str__())
                     print(colors.White)
 
                     break
@@ -81,7 +84,6 @@ def ads():
     print("\n")
     print("A word from our sponsor")
     ads = interactions.displayAds()
-    # ads()
 
 def game(Num,NamePlayers):
     # Setting category and phrase from the json files
@@ -114,6 +116,7 @@ def game(Num,NamePlayers):
 
         # The category to be guessed, is like a clue 
         print("This is the category to be guessed: {}".format(category))  
+        print("\n")
 
         if(ENDLETTERS == ""):
             print("WORDS SO FAR: " + lettersdash)
@@ -123,6 +126,7 @@ def game(Num,NamePlayers):
         player = NamePlayers[playerSpot]
 
         wheel = interactions.WheelSpin()
+        print("\n")
 
         if wheel["type"] == "bankrupt":
             player.Bankrupt()
@@ -130,18 +134,18 @@ def game(Num,NamePlayers):
             print("Player {} spun bankrupt".format(player.name))
 
         elif wheel["type"] == "loseturn":
-            print("Player {} spun lose a turn".format(player.name))
+            print("Player {} spun loseturn".format(player.name))
             time.sleep(1)
             pass
         elif wheel["type"] == "cash":
-            print("Player spun cash prize ${}".format(wheel["value"]))
-            print(colors.Green)
-            print(player)
+
+            print(colors.Green)        
+            print("Player {} spun cash prize ${}".format(player.name, wheel["value"]))
             print(colors.White)
+
             time.sleep(1)
 
             guess = input("Guess a letter, phrase, or ('Quit'-To quit match or 'Pass'-Move to the next player): ")
-            print("\n")
             guess = guess.upper()
 
             if(guess == 'QUIT'):
@@ -152,11 +156,14 @@ def game(Num,NamePlayers):
                 pass
             elif(len(guess) == 1):
                 if letterguessed.__contains__(guess):
+
                     print("{} has already been guessed".format(guess))
+                    print("\n")
                     playerSpot = (playerSpot + 1) % len(NamePlayers)
+
                     continue
                 pass     
-
+            
                 letterguessed.append(guess)
                 guessedSoFar = ""
 
@@ -183,10 +190,11 @@ def game(Num,NamePlayers):
                 
                 count = phrase.count(guess)
                 if(count > 0):
+
                     if(count == 1):
                         print("There is one {}. Great Job".format(guess))
                     else:
-                        print("There are {} {}'s. Nice one".format(count, guess))
+                        print("There are {} {}'s. Amazing".format(count, guess))
 
                     # Give them the money and the prizes
                     player.addMoney(count * wheel['value'])
@@ -206,9 +214,9 @@ def game(Num,NamePlayers):
             if len(guess) > 1:
                 if(guess == phrase):
                     Gamewinner = player
-
                     count = phrase.count(guess)
                     player.addMoney(wheel['value'] * count)
+
                     if wheel['prize']:
                         player.addPrize(wheel['prize'])
                     break
@@ -217,6 +225,7 @@ def game(Num,NamePlayers):
                     pass
 
         playerSpot = (playerSpot + 1) % len(NamePlayers)
+
         print(colors.Red)
         print("//////////////// End of Turn ////////////////")
         print(colors.White)
@@ -227,14 +236,19 @@ def game(Num,NamePlayers):
         player.addRoundMoney(Gamewinner.prizeMoney)
 
         print('{} wins! The phrase was {}'.format(Gamewinner.name, phrase))
-
         print('Their prize money won is ${}'.format(Gamewinner.prizeMoney))
+        print("\n")
 
-        print('{}'.format(Gamewinner.__str__()))
+        print('{} wins! The phrase was {}'.format(Gamewinner.name, phrase))
+        print('Their prize money won is ${}'.format(Gamewinner.prizeMoney))
+        print("\n")
+        print("The overall money is {}".format(Gamewinner.RoundBank))
 
+        print("LeaderBoard")        
         for i in range(Num):
             NamePlayers[i].Bankrupt()
             print("{}: ".format(i), NamePlayers[i].__str__())
+
     else:
         print('Noone has won. The phrase was {}'.format(phrase))
         print('Better luck next time')
@@ -243,6 +257,7 @@ def game(Num,NamePlayers):
         print('{} also won:'.format(Gamewinner.name))
         for prize in Gamewinner.prizes:
             print('    - {}'.format(prize))
+    print("\n")
 
 def userChoices(phrase, lettersdash):
     guessingWChoices = []
@@ -252,6 +267,7 @@ def userChoices(phrase, lettersdash):
         while(True):
             con = input("Choose a consonant: ")
             if(VOWELS.__contains__(con.upper())):
+                print("Not a consonant, please guess a consonant")
                 pass
             else:
                 choices.append(con)
@@ -279,13 +295,23 @@ def userChoices(phrase, lettersdash):
         lettersdash += i
 
     return lettersdash
-
     
 def bonus(Winner): # only the winner
     print("\n")
     print("YOU'VE ENTERED THE BONUS ROUND")
     # Setting category and phrase from the json files
-    category, phrase = interactions.CategoryAndPhrase()
+
+    def CategoryAndPhrase():
+        with open("phrases.json", 'r') as f1:
+            phrases = json.loads(f1.read())
+
+            category = input("Which catorgory do you want to guess for the bonus round: ")
+            #category = random.choice(list(phrases.keys()))
+            phrase   = random.choice(phrases[category])
+
+            return (category, phrase.upper())
+
+    category, phrase = CategoryAndPhrase()
 
     # When the game winner is found it would turn this into True
     Gamewinner = False
@@ -396,7 +422,7 @@ def bonus(Winner): # only the winner
                     count = phrase.count(guess)
                     Gamewinner.addMoney(wheel['value'] * count)
                     if wheel['prize']:
-                        Winner.addPrize(wheel['prize'])
+                        Gamewinner.addPrize(wheel['prize'])
                     break
                 else:
                     print("PHRASE IS WRONG")
@@ -404,11 +430,13 @@ def bonus(Winner): # only the winner
     if Gamewinner:
         time.sleep(1)
         print(interactions.winner())
+        Gamewinner.addRoundMoney(Gamewinner.prizeMoney)
 
         print('{} wins! The phrase was {}'.format(Gamewinner.name, phrase))
-        print('Their prize money won is ${}'.format(Gamewinner.RoundBank))
+        print('Their prize money won is ${}'.format(Gamewinner.prizeMoney))
 
         print('{}'.format(Gamewinner.__str__()))
+        print("The overall money is {}".format(Gamewinner.RoundBank))
     else:
         print('Noone has won. The phrase was {}'.format(phrase))
         print('Better luck next time')
@@ -417,3 +445,4 @@ def bonus(Winner): # only the winner
         print('{} also won:'.format(Gamewinner.name))
         for prize in Gamewinner.prizes:
             print('    - {}'.format(prize))
+    print("\n")

@@ -1,6 +1,6 @@
 # Wheel of Fortune Python Project
 from MultiPlayer import PlayerMove, interactions
-from partsOfGame import game, bonus, tossup
+from partsOfGame import ads, game, bonus, tossup
 import os
 
 # Start the entire game with a nice introduction
@@ -20,11 +20,10 @@ NumPlayers = interactions.AmountPlaying(
 NamePlayers = [PlayerMove(input("Enter the names of the player # {} ".format(i+1)))
                for i in range(NumPlayers)]
 
+# Finds the final winner to go into the bonus round
 def FinalWinner():
     FinalWinner = None
     for i in range(NumPlayers):
-            NamePlayers[i].RoundBank
-            #print("{}: ".format(i), NamePlayers[i].__str__())
 
             if NamePlayers[i].RoundBank > NamePlayers[1].RoundBank:
                 FinalWinner = NamePlayers[i]
@@ -37,21 +36,15 @@ def FinalWinner():
     return FinalWinner
 
 print("\n")
-for i in range(5):
+for i in range(4):
     if i == 0:
         print("Now Playing Toss up")
         tossup(NumPlayers,NamePlayers)
-    elif i == 1 or i == 2 or i == 3:
+    elif i == 1 or i == 2:
+        #i == 3
         print("Starting round ", i)
+        ads()
         game(NumPlayers,NamePlayers)
     else:
         final = FinalWinner()
         bonus(final)
-
-
-'''
-THINGS TO FIX:
-- when you win, it still says that you lost.
-- validation for the consonants and vowels
-- time limit (for just the overall round/game or for choices as well?)
-'''

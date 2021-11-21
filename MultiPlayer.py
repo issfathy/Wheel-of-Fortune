@@ -2,6 +2,8 @@ import json
 import random
 import time
 import os
+from tkinter import *
+import webbrowser
 
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 VOWELS  = 'AEIOU'
@@ -14,6 +16,8 @@ class colors:
     Red = '\033[91m'
     White = '\033[97m'
     Gold = '\033[33m'
+    adsgolden = '#f5c842' # set your favourite rgb color
+    adsgreen = '#009e2d'
     
 class PlayerBasics:
     def __init__(self , name):
@@ -112,6 +116,34 @@ class interactions:
             phrase   = random.choice(phrases[category])
             return (category, phrase.upper())
 
+    def ads():
+        with open("ads.json", 'r') as f1:
+            ads = json.loads(f1.read())
+
+            return random.choice(ads)
+
+    def displayAds():
+        window = Tk()
+        window.configure(bg=colors.adsgolden)
+        window.title("A Quick Break")
+        window.geometry("450x100")
+        
+        ads = interactions.ads()
+        adsText = ads['text']
+        url = ads['urlLink']
+        adstype = ads['type']
+
+        def onClick(x):
+            webbrowser.open(x,new=1)
+
+        label = Label(text = adsText, bg=colors.adsgolden, font=("Comic Sans MS", 16, "bold"))
+        label.pack()
+        labelOne = Label(text="A word from our sponsor", font=("Arial", 10), bg=colors.adsgolden)
+        labelOne.pack()
+
+        click = Button(window, bg=colors.adsgreen, text = adstype, command = lambda: onClick(url))
+        click.pack()
+        window.mainloop()
     # Prints the winner with a little throphy
     def winner():
         prize = (colors.Gold + "        ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶\n" +
