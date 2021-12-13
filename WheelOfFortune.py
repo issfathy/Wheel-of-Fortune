@@ -31,17 +31,14 @@ def FinalWinner():
                 if NamePlayers[1].RoundBank > NamePlayers[2].RoundBank:
                     FinalWinner = NamePlayers[i]
 
-    print("\n")
     print("The overall winner is {}".format(FinalWinner))
     return FinalWinner
 
-print("\n")
-for i in range(4):
+for i in range(5):
     if i == 0:
-        print("Now Playing Toss up")
+        print("")
         tossup(NumPlayers,NamePlayers)
-    elif i == 1 or i == 2:
-        #i == 3
+    elif i == 1 or i == 2 or i == 3:
         print("Starting round ", i)
         ads()
         game(NumPlayers,NamePlayers)

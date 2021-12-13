@@ -16,14 +16,14 @@ class colors:
     Red = '\033[91m'
     White = '\033[97m'
     Gold = '\033[33m'
-    adsgolden = '#f5c842' # set your favourite rgb color
+    adsgolden = '#f5c842' 
     adsgreen = '#009e2d'
     
 class PlayerBasics:
     def __init__(self , name):
         self.name = name
         # Can 0 it out before submitting
-        self.prizeMoney = 250
+        self.prizeMoney = 0
         self.RoundBank = 0
         self.prizes = []
 
@@ -144,6 +144,7 @@ class interactions:
         click = Button(window, bg=colors.adsgreen, text = adstype, command = lambda: onClick(url))
         click.pack()
         window.mainloop()
+        
     # Prints the winner with a little throphy
     def winner():
         prize = (colors.Gold + "        ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶\n" +

@@ -10,7 +10,7 @@ VOWELS = 'AEIOU'
 def tossup(Num,Name):
 
     category, phrase = interactions.CategoryAndPhrase()
-
+    
     guessingWord = []
     lettersdash = ""
 
@@ -25,10 +25,12 @@ def tossup(Num,Name):
 
     letterIndex =[]
 
+    print("\n")
+    print("Now Playing Toss up")
+
     while(True):
-        ## CAN BE DELETED BEFORE submitted, (Add print("\n"))
-        print("This is the word to be guess", phrase)
-        #random generator of numbers from - to len(guessingWord)
+
+        # Random generator of numbers from - to len(guessingWord)
         value = random.randint(0, len(phrase) - 1)
 
         if letterIndex.__contains__(value):
@@ -39,12 +41,13 @@ def tossup(Num,Name):
             time.sleep(1)
             print(*guessingWord)
             answer = input("Type 'A' to guess the phrase or Press 'Enter' to continue: ")
-            print("\n")
             answer = answer.upper()
 
             if answer == " ":
                 continue
             elif answer == "A":
+                print("\n")
+                print("The list of players are:")
                 for i in range(Num):
                     print("{}: ".format(i), Name[i].listPlayer())
                     
@@ -74,7 +77,7 @@ def tossup(Num,Name):
                     time.sleep(1)
                     print("You got it wrong")
                     continue
-        # add that index into the letters dashed 
+
         if len(letterIndex) == len(phrase):
             print("No one guessed on this round of toss up")
             break
@@ -84,10 +87,12 @@ def ads():
     print("\n")
     print("A word from our sponsor")
     ads = interactions.displayAds()
+    print(" ")
 
 def game(Num,NamePlayers):
     # Setting category and phrase from the json files
     category, phrase = interactions.CategoryAndPhrase()
+    
 
     # When the game winner is found it would turn this into True
     Gamewinner = False
@@ -111,8 +116,10 @@ def game(Num,NamePlayers):
         lettersdash += i
 
     while(True):
-        # For Testing purposes, will not be in the final cut 
-        print("\n" + "This is the word to be guessed", phrase)  
+
+        player = NamePlayers[playerSpot]
+
+        wheel = interactions.WheelSpin()
 
         # The category to be guessed, is like a clue 
         print("This is the category to be guessed: {}".format(category))  
@@ -123,10 +130,6 @@ def game(Num,NamePlayers):
         else:
             print("WORDS SO FAR: " + ENDLETTERS)
 
-        player = NamePlayers[playerSpot]
-
-        wheel = interactions.WheelSpin()
-        print("\n")
 
         if wheel["type"] == "bankrupt":
             player.Bankrupt()
@@ -144,7 +147,6 @@ def game(Num,NamePlayers):
             print(colors.White)
 
             time.sleep(1)
-
             guess = input("Guess a letter, phrase, or ('Quit'-To quit match or 'Pass'-Move to the next player): ")
             guess = guess.upper()
 
@@ -155,12 +157,11 @@ def game(Num,NamePlayers):
                 print("{} decided to skip to the next player".format(player.name))
                 pass
             elif(len(guess) == 1):
-                if letterguessed.__contains__(guess):
 
+                if letterguessed.__contains__(guess):
                     print("{} has already been guessed".format(guess))
                     print("\n")
                     playerSpot = (playerSpot + 1) % len(NamePlayers)
-
                     continue
                 pass     
             
@@ -175,7 +176,6 @@ def game(Num,NamePlayers):
 
                 for i in letterguessed:
                     guessedSoFar += i
-
                 print("LETTERS GUESSED SO FAR: ", guessedSoFar)
 
                 for i in range(len(phrase)):
@@ -210,7 +210,7 @@ def game(Num,NamePlayers):
 
                 elif count == 0:
                     print("There are no {} in this phrase".format(guess))
-
+            
             if len(guess) > 1:
                 if(guess == phrase):
                     Gamewinner = player
@@ -238,11 +238,8 @@ def game(Num,NamePlayers):
         print('{} wins! The phrase was {}'.format(Gamewinner.name, phrase))
         print('Their prize money won is ${}'.format(Gamewinner.prizeMoney))
         print("\n")
-
-        print('{} wins! The phrase was {}'.format(Gamewinner.name, phrase))
-        print('Their prize money won is ${}'.format(Gamewinner.prizeMoney))
+        print("The overall money of player {} is ${}".format(Gamewinner.name ,Gamewinner.RoundBank))
         print("\n")
-        print("The overall money is {}".format(Gamewinner.RoundBank))
 
         print("LeaderBoard")        
         for i in range(Num):
@@ -254,6 +251,7 @@ def game(Num,NamePlayers):
         print('Better luck next time')
 
     if Gamewinner.prizes:
+        print(" ")
         print('{} also won:'.format(Gamewinner.name))
         for prize in Gamewinner.prizes:
             print('    - {}'.format(prize))
@@ -275,9 +273,10 @@ def userChoices(phrase, lettersdash):
     while(True):
         vowel = input("Choose a vowel: ")
         if(VOWELS.__contains__(vowel.upper()) == False):
-            pass
+            print("Not a vowel, please guess a vowel")
         else:
             choices.append(vowel)
+            print(" ")
             break
     
     for i in phrase:
@@ -304,19 +303,25 @@ def bonus(Winner): # only the winner
     def CategoryAndPhrase():
         with open("phrases.json", 'r') as f1:
             phrases = json.loads(f1.read())
-
+            Allcategory = phrases.keys()
+            print(" ")
+            print("The categorys are:")
+            print(*Allcategory)
+            print(" ")
             category = input("Which catorgory do you want to guess for the bonus round: ")
+            print(" ")
+            category = category.upper()
             #category = random.choice(list(phrases.keys()))
-            phrase   = random.choice(phrases[category])
+            phrase = random.choice(phrases[category])
 
             return (category, phrase.upper())
 
     category, phrase = CategoryAndPhrase()
+    
 
     # When the game winner is found it would turn this into True
     Gamewinner = False
 
-    VOWELS_COST = 250
     ENDLETTERS = ""
     playerSpot = 0
     guessingWord = []
@@ -340,23 +345,24 @@ def bonus(Winner): # only the winner
 
     while(True):
         # For Testing purposes, will not be in the final cut 
-        print("\n" + "This is the word to be guessed", phrase)  
+        wheel = interactions.BonusSpin()
 
         # The category to be guessed, is like a clue 
         print("This is the category to be guessed: {}".format(category))  
+        print(" ")
 
         if(ENDLETTERS == ""):
             print("WORDS SO FAR: " + lettersdash)
         else:
             print("WORDS SO FAR: " + ENDLETTERS)
 
-        wheel = interactions.BonusSpin()
-
         if wheel["type"] == "cash":
+            print(colors.Green) 
             print(Winner)
+            print(colors.White)
             print("\n")
-            time.sleep(1)
 
+            time.sleep(1)
             guess = input("Guess a letter, phrase, or ('Quit'-To quit match or 'Pass'-Move to the next player): ")
             print("\n")
             guess = guess.upper()
@@ -434,14 +440,14 @@ def bonus(Winner): # only the winner
 
         print('{} wins! The phrase was {}'.format(Gamewinner.name, phrase))
         print('Their prize money won is ${}'.format(Gamewinner.prizeMoney))
-
-        print('{}'.format(Gamewinner.__str__()))
-        print("The overall money is {}".format(Gamewinner.RoundBank))
+        print(" ")
+        print("The overall money is ${}".format(Gamewinner.RoundBank))
     else:
         print('Noone has won. The phrase was {}'.format(phrase))
         print('Better luck next time')
 
     if Gamewinner.prizes:
+        print(" ")
         print('{} also won:'.format(Gamewinner.name))
         for prize in Gamewinner.prizes:
             print('    - {}'.format(prize))
