@@ -1,0 +1,33 @@
+import json
+import random
+import time
+import os
+from tkinter import *
+import webbrowser
+
+For your sake of testing everything I would advist placing print(phrase) - to show the phrase being guessed
+On lines - 13, 95, 320 in partsOfGame.py file
+
+Everything above should be downloaded already and should be working like before
+
+There aren't new downloads that are needed
+
+*To play the game you must first go to the WheelOfFortune.py and click run
+
+-The tossup will appear where you will have a chance to enter A to solve the phrase or just press enter to move on
+
+-Pressing A will prompt you a list of players where you get to choose from 0,1,2
+
+-After choosing yourself you can than guess the phrase and depending on weather it is right or wrong the game will continue. 
+
+*Then the ad will pop up either exit out or click the button to go to the ad
+
+*There are 3 rounds to the game and like sprint 1 you can continue and play
+
+*Entering the bonus round you will have a choice of categories to choose for your guessing
+
+-Following that would be you choosing 3 consonant and 1 vowel
+
+-After, the wheel will spin and display your reward if you guess the phrase correctly
+
+That is the game explained in full detail

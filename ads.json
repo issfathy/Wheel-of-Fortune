@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "type": "McDonalds",
     "text": "I'm Lovin it",
@@ -43,10 +43,7 @@
     "type": "Minecraft",
     "text": "Build, Create, Destroy",
     "urlLink": "https://www.youtube.com/watch?v=MmB9b5njVbA"
-  },
-  {
-    "type": "Nike",
-    "text": "Just Do It, Find your Greatness",
-    "urlLink": "https://www.youtube.com/watch?v=WYP9AGtLvRg"
   }
 ]
+
+
